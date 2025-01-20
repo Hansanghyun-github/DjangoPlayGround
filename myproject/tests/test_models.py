@@ -52,3 +52,19 @@ def test_bulk_update():
 
     for post in posts:
         assert Post.objects.get(pk=post.pk).content == post.content
+
+@pytest.mark.django_db
+def test_create_pk():
+    post = Post.objects.create(title='제목', content='내용')
+    assert post.pk is not None
+
+@pytest.mark.django_db
+def test_bulk_create_pk():
+    posts = [
+        Post(title='제목1', content='내용1'),
+        Post(title='제목2', content='내용2'),
+        Post(title='제목3', content='내용3'),
+    ]
+    Post.objects.bulk_create(posts)
+    for post in posts:
+        assert post.pk is None
