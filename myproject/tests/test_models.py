@@ -27,9 +27,9 @@ def test_update():
     post = Post.objects.create(title='제목', content='내용')
     title = '수정된 제목'
     content = '수정된 내용'
-    Post.objects.update_or_create(pk=post.pk, defaults={'title': title, 'content': content})
+    Post.objects.update_or_create(pk=post.pk, defaults={'title': title})
     assert Post.objects.get(pk=post.pk).title == title
-    assert Post.objects.get(pk=post.pk).content == content
+    assert Post.objects.get(pk=post.pk).content == '내용'
 
 @pytest.mark.django_db
 def test_bulk_update():
