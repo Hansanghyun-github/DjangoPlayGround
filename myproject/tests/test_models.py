@@ -7,6 +7,7 @@ def test_post_create():
     assert post.title == '제목'
     assert post.content == '내용'
     assert Post.objects.count() == 1
+    assert post.pk is not None
 
 @pytest.mark.django_db
 def test_post_get():
