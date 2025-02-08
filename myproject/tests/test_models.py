@@ -88,3 +88,11 @@ def test_delete_id():
 
     assert Post.objects.get(pk=origin_id) is not None
     assert post.pk is None
+
+@pytest.mark.django_db
+def test_refresh():
+    post = Post.objects.create(title='제목', content='내용')
+    post.title = '수정된 제목'
+
+    post.refresh_from_db()
+    assert post.title == '제목'
