@@ -1,5 +1,7 @@
 import pytest
+
 from myapp.models import Post
+from django.db import transaction
 
 @pytest.mark.django_db
 def test_post_create():
@@ -69,3 +71,20 @@ def test_bulk_create_pk():
     Post.objects.bulk_create(posts)
     for post in posts:
         assert post.pk is None
+
+
+@transaction.atomic
+def delete_and_error(post):
+    post.delete()
+    raise Exception('error')
+
+@pytest.mark.django_db
+def test_delete_id():
+    post = Post.objects.create(title='제목', content='내용')
+    origin_id = post.pk
+
+    with pytest.raises(Exception):
+        delete_and_error(post)
+
+    assert Post.objects.get(pk=origin_id) is not None
+    assert post.pk is None
